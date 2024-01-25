@@ -1,0 +1,24 @@
+#question 1
+#a
+getwd()
+setwd("C:/Users/zynep/Downloads")
+my_file <-read.csv("iris_new.csv")
+
+#b
+my_file
+my_file[c(1:8),]
+
+#c
+sum(is.na(my_file))
+
+#d
+new_file<-na.omit(my_file)
+new_file
+dim(new_file)
+m <- mean(new_file$Sepal.Width)
+?replace
+replace(my_file,NA,m)
+my_file$Sepal.Width[is.na(my_file$Sepal.Width)] <- 
+my_file$Sepal.Width
+my_file
+my_file[sapply(my_file$Sepal.Width,is.null)]
