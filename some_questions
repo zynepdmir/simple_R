@@ -1,0 +1,78 @@
+# Question 1
+#a
+sac<-function(x){
+  n<-length(x)
+  mean<-mean(x)
+  num1<-0 #numerator of r1
+  num2<-0 #numerator of r2
+  for (i in 1:(n-1)){
+    num1<-num1+ (x[[i]]-mean)*(x[[i+1]]-mean)
+  }
+  for (i in 1:(n-2)){
+    num2<- num2 + (x[[i]]-mean)*(x[[i+2]]-mean)
+  }
+  denom1<-var(x)*(n-1)  #denominator of r1
+  denom2<-denom1    #denominator of r2
+  r1<-num1/denom1
+  r2<-num2/denom2
+  return(list("r1"=r1,"r2"=r2))
+}
+
+#b
+myvec<- seq(2,56,3)
+sac(myvec)
+
+# Question 2
+iris
+str(iris)
+summary(iris)
+
+# Ho: mu=3  is the null hypothesis
+# HA: mu!=3 is the alternative hypothesis
+test_mean <- t.test(iris$Petal.Length, mu=3, alternative = "two.sided")
+test_mean
+
+
+#b
+p_val<-test_mean$p.value
+p_val
+
+# since the confidence level is 0.95, in this point,
+# the significance level (alpha) is 5%. 
+
+alpha <- 0.05
+if (alpha>p_val){
+  print(("Reject the null hypothesis"))
+}else{
+    print("Fail to reject the null hypothesis")
+  }
+
+
+#c
+test_mean$conf.int
+
+# Question 3
+#a
+set.seed(23)
+abc <- rnorm(200,5,2) #since sd is the square root of the variance
+head(abc)
+
+#b
+plot(density(abc))
+
+#c
+log_likehd <- function(mean,variance=4,sample){
+  n <- length(sample)
+  out <- -0.5*n*log(pi)-0.5*n*log(variance)-(1/(2*variance))*sum((sample-mean)^2)
+  return(-1*out) 
+}
+
+#when we assume the mean is 3
+log_likehd(mean=3, variance=4, sample=abc)
+
+# Question 4
+#a
+pnorm(120, mean=100, sd=15, lower.tail=TRUE)-pnorm(80, mean=100, sd=15, lower.tail=TRUE)
+
+#b
+pt(1, df=25, lower.tail=T)-pt(0, df=25, lower.tail=T)
