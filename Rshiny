@@ -1,0 +1,367 @@
+getwd()
+setwd("C:/Users/zynep/OneDrive/Desktop/stat292/the project")
+dataset<-read.csv("heart.csv")
+dataset
+head(dataset)
+library(ggplot2)
+
+"very_high_ml <- new_df$M_Labour_force[which(new_df$Human_development=="Very high")]
+high_mlf <- new_df$M_Labour_force[which(new_df$Human_development=="High")]
+medium_mlf <- new_df$M_Labour_force[which(new_df$Human_development=="Middle")]
+low_mlf<-new_df$M_Labour_force[which(new_df$Human_development=="Low")]
+"
+male<-dataset[which(dataset$sex==1),]
+male
+female<-dataset[which(dataset$sex==0),]
+head(female)
+
+str(male)
+str(female)
+#we have 312 female and 713 male observations
+713/312
+
+dataset$sex<-ifelse(dataset$sex==0,"f","m")
+dataset
+
+dataset$target<-ifelse(dataset$target==0,"absent","present")
+dataset
+
+colnames(dataset)<-c("age","sex","cp","trestbps","chol","fbs","restecg","thalach","exang","oldpeak",
+                     "slope","ca","thal","disease" ) 
+ggplot(dataset, 
+       aes(x = disease, 
+           fill = sex)) + 
+  geom_bar(position = position_dodge(preserve = "single"), color="black")
+
+ggplot(dataset, 
+       aes(fill=sex,y=age,x=disease)) + 
+  geom_bar(position = "dodge",stat="identity")
+ 
+
+
+ggplot(dataset, 
+       aes(fill=sex,y=trestbps,x=disease)) + 
+  geom_bar(position = "dodge",stat="identity")
+
+ggplot(dataset, 
+       aes(fill=sex,y=chol,x=disease)) + 
+  geom_bar(position = "dodge",stat="identity")
+
+ggplot(dataset, 
+       aes(fill=sex,y=thalach,x=disease)) + 
+  geom_bar(position = "dodge",stat="identity")
+
+ggplot(dataset, 
+       aes(fill=sex,y=oldpeak,x=disease)) + 
+  geom_bar(position = "dodge",stat="identity")
+
+ggplot(dataset, 
+       aes(fill=sex,y=slope,x=disease)) + 
+  geom_bar(position = "dodge",stat="identity")
+
+categorical_variables<-c("sex","cp","fbs","exang","restecg","ca","thal","disease")
+continuos_variables<-c("age","trestbps","chol","thalach","oldpeak","slope")
+
+
+####################################################
+
+#Maximum_heart_rate
+ggplot(dataset, 
+       aes(x = factor(disease), 
+           y = max_heart_rate, 
+           color = disease)) +
+  geom_boxplot(size=1,
+               outlier.shape = 1,
+               outlier.color = "black",
+               outlier.size  = 3) +
+  geom_jitter(alpha = 0.5, 
+              width=.2) + 
+  scale_y_continuous() +
+  labs(title = "Maximum_heart_rate by target",
+       x = "disease",
+       y = "max_heart_rate") +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  coord_flip()
+
+#maximum heart rate new code
+set.seed(123) 
+ggplot(data = dataset, 
+       aes(x = factor(disease), 
+           y = max_heart_rate, 
+           color = disease)) +
+  geom_boxplot(size = 1,
+               outlier.shape = 1,
+               outlier.color = "black",
+               outlier.size  = 3) +
+  geom_jitter(alpha = 0.5, 
+              width = 0.2) + 
+  scale_y_continuous() +
+  labs(title = "Maximum Heart Rate by Target",
+       x = "Disease",
+       y = "Maximum Heart Rate") +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  coord_flip()
+
+str(dataset)
+
+#Maximum hearth rate with Violin plots
+#ggplot(dataset, 
+#       aes(x = disease, 
+#           y = max_heart_rate)) +
+#  geom_violin(fill = "violetred4") +
+#  geom_boxplot(width = .2, 
+#               fill = "orange",
+#               outlier.color = "orange",
+#               outlier.size = 1.5) + 
+#  labs(title = "maximum_hearth_rate distribution by target")
+
+
+#blood_pressure (KULLANILACAĞINI ZANNETMİYORUM)
+ggplot(dataset, 
+       aes(x = factor(disease), 
+           y = blood_pressure, 
+           color = disease)) +
+  geom_boxplot(size=1,
+               outlier.shape = 1,
+               outlier.color = "black",
+               outlier.size  = 3) +
+  geom_jitter(alpha = 0.5, 
+              width=.2) + 
+  scale_y_continuous() +
+  labs(title = "blood_pressure by disease",
+       x = "target",
+       y = "blood_pressure") +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  coord_flip()
+
+
+#new code for blood_pressure
+set.seed(123) 
+ggplot(data = dataset, 
+       aes(x = disease, 
+           y = blood_pressure, 
+           color = disease)) +
+  geom_boxplot(size = 1,
+               fill = "lightblue",
+               outlier.shape = 1,
+               outlier.color = "black",
+               outlier.size = 3) +
+  geom_jitter(alpha = 0.5, 
+              width = 0.2) + 
+  scale_y_continuous() +
+  labs(title = "Blood Pressure by Disease",
+       x = "Disease",
+       y = "Blood Pressure (mmHg)") +
+  theme_minimal() +
+  theme(legend.position = "none",
+        panel.background = element_rect(fill = "white"),
+        axis.text = element_text(size = 12),
+        axis.title = element_text(size = 14, face = "bold"),
+        plot.title = element_text(size = 16, face = "bold")) +
+  coord_flip() +
+  scale_color_manual(values = c("0" = "darkblue", "1" = "darkred"))
+
+###################################################
+library(tidyverse)
+plotdata <- dataset %>% #KULLANILMAZ
+  group_by(sex, chest_pain_type) %>%
+  summarize(n = n()) %>% 
+  mutate(pct = n/sum(n),
+         lbl = scales::percent(pct))
+plotdata
+ggplot(plotdata, 
+       aes(x = factor(sex,
+                      levels = c(0,1)),
+           y = pct,
+           fill = factor(chest_pain_type, 
+                         levels = c(0,1,2,3),
+                         labels = c("typical angina", 
+                                    "atypical angina",
+                                    "non-anginal pain",
+                                    "asymptomatic")))) + 
+  geom_bar(stat = "identity",
+           position = "fill") +
+  scale_y_continuous(breaks = seq(0, 1, .2)) +
+  geom_text(aes(label = lbl), 
+            size = 3, 
+            position = position_stack(vjust = 0.5)) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(y = "Percent", 
+       fill = "Drive Train",
+       x = "Sex",
+       title = "Chest Pain Type by Sex") +
+  theme_minimal()
+
+#improved code:
+library(ggplot2)
+
+ggplot(plotdata, 
+       aes(x = factor(sex, levels = c(0, 1)),
+           y = pct,
+           fill = factor(chest_pain_type, 
+                         levels = c(0, 1, 2, 3),
+                         labels = c("Typical Angina", 
+                                    "Atypical Angina",
+                                    "Non-Anginal Pain",
+                                    "Asymptomatic")))) + 
+  geom_bar(stat = "identity",
+           position = "fill",
+           color = "black") +
+  geom_text(aes(label = lbl), 
+            size = 4, 
+            position = position_fill(vjust = 0.5)) +
+  scale_fill_brewer(palette = "Set2") +
+  scale_y_continuous(labels = scales::percent_format(),
+                     limits = c(0, 1),
+                     expand = c(0, 0),
+                     breaks = seq(0, 1, by = 0.2)) +
+  labs(x = "Sex",
+       y = "Percent",
+       fill = "Chest Pain Type",
+       title = "Chest Pain Type by Sex") +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 16, face = "bold"),
+        axis.title = element_text(size = 12),
+        axis.text = element_text(size = 10),
+        legend.title = element_text(size = 12),
+        legend.text = element_text(size = 10),
+        legend.position = "bottom",
+        panel.grid.major.y = element_line(color = "gray90"),
+        panel.grid.minor = element_blank())
+
+########################################
+#Maximum_heart_rate
+ggplot(dataset, 
+       aes(x = factor(disease), 
+           y = max_heart_rate, 
+           color = disease)) +
+  geom_boxplot(size=1,
+               outlier.shape = 1,
+               outlier.color = "black",
+               outlier.size  = 3) +
+  geom_jitter(alpha = 0.5, 
+              width=.2) + 
+  scale_y_continuous() +
+  labs(title = "Maximum Heart Rate by Disease",
+       x = "Disease",
+       y = "Maximum Heart Rate") +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  coord_flip()
+
+####################################
+library(tidyverse)
+plotdata2 <- dataset %>% 
+  group_by(sex, disease) %>%
+  summarize(n = n()) %>% 
+  mutate(pct = n/sum(n),
+         lbl = scales::percent(pct))
+plotdata2
+ggplot(plotdata2, 
+       aes(x = factor(sex,
+                      levels = c(0,1)),
+           y = pct,
+           fill = factor(disease, 
+                         levels = c(0,1),
+                         labels = c("Diagnosis of Coronary Hearth Disease", 
+                                    "No Absensence of It")))) + 
+  geom_bar(stat = "identity",
+           position = "fill") +
+  scale_y_continuous(breaks = seq(0, 1, .2)) +
+  geom_text(aes(label = lbl), 
+            size = 3, 
+            position = position_stack(vjust = 0.5)) +
+  scale_fill_brewer(palette = "Set2") +
+  labs(y = "Percent", 
+       fill = "Drive Train",
+       x = "Sex",
+       title = "Target by Sex") +
+  theme_minimal()
+
+#improved code is
+library(ggplot2)
+library(dplyr)
+
+plotdata2 <- dataset %>%
+  group_by(sex, disease) %>%
+  summarize(n = n()) %>%
+  mutate(pct = n / sum(n),
+         lbl = scales::percent(pct))
+
+ggplot(plotdata2,
+       aes(x = factor(sex, levels = c(0, 1)),
+           y = pct,
+           fill = factor(disease,
+                         levels = c(0, 1),
+                         labels = c("Diagnosis of Coronary Heart Disease",
+                                    "No Absence of It")))) +
+  geom_bar(stat = "identity",
+           position = "fill",
+           color = "black") +
+  geom_text(aes(label = lbl),
+            size = 4,
+            position = position_fill(vjust = 0.5)) +
+  scale_fill_brewer(palette = "Set2") +
+  scale_y_continuous(labels = scales::percent_format(),
+                     limits = c(0, 1),
+                     expand = c(0, 0),
+                     breaks = seq(0, 1, by = 0.2)) +
+  labs(x = "Sex",
+       y = "Percent",
+       fill = "",
+       title = "Disease Presence by Sex") +
+  theme_minimal() +
+  theme(plot.title = element_text(size = 16, face = "bold"),
+        axis.title = element_text(size = 12),
+        axis.text = element_text(size = 10),
+        legend.title = element_text(size = 12),
+        legend.text = element_text(size = 10),
+        legend.position = "bottom",
+        panel.grid.major.y = element_line(color = "gray90"),
+        panel.grid.minor = element_blank())
+################################################
+
+#serum_chol Box plot
+ggplot(dataset, 
+       aes(x = factor(disease), 
+           y = chol, 
+           color = disease)) +
+  geom_boxplot(size=1,
+               outlier.shape = 1,
+               outlier.color = "black",
+               outlier.size  = 3) +
+  geom_jitter(alpha = 0.5, 
+              width=.2) + 
+  scale_y_continuous() +
+  labs(title = "serum_chol by target",
+       x = "disease",
+       y = "serum_chol") +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  coord_flip()
+
+# improved code is (error )
+ggplot(dataset, 
+       aes(x = factor(disease), 
+           y = chol, 
+           color = disease)) +
+  geom_boxplot(size = 1,
+               fill = "lightblue",
+               outlier.shape = 1,
+               outlier.color = "black",
+               outlier.size = 3) +
+  geom_jitter(alpha = 0.5, 
+              width = 0.2,
+              height = 0) +  # Set height to 0 to avoid vertical jitter
+  scale_y_continuous(expand = c(0, 0)) +
+  labs(title = "Serum Cholesterol by Disease Status",
+       x = "Disease",
+       y = "Serum Cholesterol") +
+  theme_minimal() +
+  theme(legend.position = "none",
+        panel.grid.major.y = element_line(color = "gray90")) +
+  coord_flip() +
+  scale_color_manual(values = c("0" = "darkblue", "1" = "darkred"))
