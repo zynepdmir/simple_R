@@ -1,0 +1,51 @@
+# 3.6. Can we claim at 0.05 significance level that the proportion
+# of sample with M_secondary_educ greater then 95 is greater than 
+# the proportion of sample with F_secondary_educ greater then 95?
+
+# Education plays a crucial role in shaping individuals' lives and 
+# opportunities. In particular, the accessibility and 
+# 
+#
+#
+#  
+
+
+
+# [Introduction part]
+# Our hypothesis:
+# The null hypothesis: proportion of sample with Male secondary
+# education greater than 95 is equal to the proportion of 
+# sample with F_secondary_educ greater then 95.
+
+# The alternative hypothesis: the proportion of sample with male secondary
+# education greater than 95 is greater than the proportion of sample 
+# with female secondary education greater than 95.
+
+# Assumptions of  z-test for 2 population proportions:
+# 1. The samples are randomly selected. The data is collected randomly,
+# therefore we can assume that random sampling.
+# The samples are independent.
+#
+#
+#
+#
+#
+
+
+
+getwd()
+setwd("C:/Users/zynep/OneDrive/Desktop/stat250")
+df<-read.csv("Gender_Inequality_Index.csv")
+df<-na.omit(df)
+
+success1<- df$M_secondary_educ[which(df$M_secondary_educ>95)]
+success2 <-df$F_secondary_educ[which(df$F_secondary_educ>95)]
+x1<-length(success1)
+x2<-length(success2)
+
+n1<-length(df$M_secondary_educ)
+n2<-length(df$F_secondary_educ)
+
+prop.test(c(x1, x2), c(n1,n2), p = NULL, alternative = "greater", correct = F)
+# since p-value = 0.3907 > 0.05, we do not reject the null hypothesis.
+
