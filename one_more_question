@@ -1,0 +1,45 @@
+sac<-function(x){
+  n<-length(x)
+  mean<-mean(x)
+  num1<-0
+  num2<-0
+  for (i in 1:(n-1)){
+    num1<-num1+ (x[[i]]-mean)*(x[[i+1]]-mean)
+  }
+  denom1<-sum((x-mean)^2)
+  for (i in 1:(n-2)){
+    num2<- num2 + (x[[i]]-mean)*(x[[i+2]]-mean)
+  }
+  denom2<-sum((x-mean)^2)
+  r1<-num1/denom1
+  r2<-num2/denom2
+  return(list("r1"=r1,"r2"=r2, "num1"=num1, "denom1"=denom1,
+              "num2"=num2,"denom2"=denom2))
+}
+vecc<-1:4
+sac(vecc)
+x<-seq(2,56,3)
+sac(x)
+acf(x,pl=FALSE)
+acf(vecc, pl=FALSE)
+cev<-1:5
+acf(cev, pl=FALSE)
+sac(cev)
+length(x)
+y<-seq(2,59,3)
+length(y)
+sac(y)
+acf(y, pl= FALSE)
+y
+sac(vecc)
+sac(y)
+var(vecc)*3
+sac(cev)
+acf(cev, pl=FALSE)
+var(cev)*4
+denom2<-sum((mean(x)-x)**2)
+denom2
+var(x)*(length(x)-1)
+0.343*2
+0.686*5130
+1755*2
