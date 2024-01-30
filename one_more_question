@@ -1,3 +1,4 @@
+# homework 1
 sac<-function(x){
   n<-length(x)
   mean<-mean(x)
